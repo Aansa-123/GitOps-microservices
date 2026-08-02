@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoice-api
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: invoice-api
+
+  template:
+    metadata:
+      labels:
+        app: invoice-api
+
+    spec:
+      containers:
+        - name: invoice-api
+
+          image: aansa123/invoice-service:dev
+
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 3002
+
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: invoice-config
+                  key: PORT
+
+            - name: USER_API
+              valueFrom:
+                configMapKeyRef:
+                  name: invoice-config
+                  key: USER_API
+
+            - name: BLOG_API
+              valueFrom:
+                configMapKeyRef:
+                  name: invoice-config
+                  key: BLOG_API
+
+            - name: KAFKA_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  name: invoice-config
+                  key: KAFKA_BROKER
+
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: invoice-secret
+                  key: MONGO_URI
+
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: invoice-secret
+                  key: JWT_SECRET

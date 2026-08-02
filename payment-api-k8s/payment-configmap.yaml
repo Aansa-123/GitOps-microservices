@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-config
+data:
+  PORT: "3500"
+
+  USER_API: "http://user-service:3000"
+
+  BLOG_API: "http://blog-service:3001"
+
+  INVOICE_API: "http://invoice-service:3002"
+  
+  # use host.minikube.internal:9092 because now running kafka container inside docker container(outside minikube)
+  # KAFKA_BROKER: "host.minikube.internal:9092"
+
+  # use kafka:9092 because now running kafka container inside minikube
+  KAFKA_BROKER: "kafka:9092"
+
+  JWT_EXPIRES_IN: "7d"

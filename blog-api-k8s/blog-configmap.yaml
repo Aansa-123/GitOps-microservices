@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blog-config
+data:
+  PORT: "3001"
+  USER_API: "http://user-service:3000"
+  
+  # use host.minikube.internal:9092 because now running kafka container inside docker container(outside minikube)
+  # KAFKA_BROKER: "host.minikube.internal:9092"
+
+  # use kafka:9092 because now running kafka container inside minikube
+  KAFKA_BROKER: "kafka:9092"

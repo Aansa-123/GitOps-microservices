@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: payment-api
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: payment-api
+
+  template:
+    metadata:
+      labels:
+        app: payment-api
+
+    spec:
+      containers:
+        - name: payment-api
+
+          image: aansa123/payment-service:dev
+
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 3500
+
+          env:
+
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: PORT
+
+            - name: USER_API
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: USER_API
+
+            - name: BLOG_API
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: BLOG_API
+
+            - name: INVOICE_API
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: INVOICE_API
+
+            - name: KAFKA_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: KAFKA_BROKER
+
+            - name: JWT_EXPIRES_IN
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: JWT_EXPIRES_IN
+
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: payment-secret
+                  key: MONGO_URI
+
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: payment-secret
+                  key: JWT_SECRET

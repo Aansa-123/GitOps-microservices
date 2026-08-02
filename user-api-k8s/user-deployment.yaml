@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-api
+  template:
+    metadata:
+      labels:
+        app: user-api
+    spec:
+      containers:
+      - name: user-api
+        image: aansa123/user-service:dev
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: user-api-secret
+                key: DATABASE_URL
+
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: user-api-secret
+                key: JWT_SECRET
+
+          - name: JWT_EXPIRES_IN
+            valueFrom:
+              secretKeyRef:
+                name: user-api-secret
+                key: JWT_EXPIRES_IN
