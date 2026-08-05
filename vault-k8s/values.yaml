@@ -18,7 +18,7 @@ server:
 
   dataStorage:
     enabled: true
-    storageClass: ""
+    storageClass: manual
     accessMode: ReadWriteOnce
     size: 5Gi
 
