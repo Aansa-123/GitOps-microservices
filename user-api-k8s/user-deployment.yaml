@@ -12,6 +12,7 @@ spec:
       labels:
         app: user-api
     spec:
+      serviceAccountName: user-sa
       containers:
       - name: user-api
         image: aansa123/user-service:dev-8
