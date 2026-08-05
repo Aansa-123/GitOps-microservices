@@ -1,0 +1,35 @@
+global:
+  enabled: true
+
+injector:
+  enabled: true
+
+server:
+  enabled: true
+
+  image:
+    repository: "hashicorp/vault"
+
+  standalone:
+    enabled: true
+
+  ha:
+    enabled: false
+
+  dataStorage:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 5Gi
+
+  ui:
+    enabled: true
+
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
