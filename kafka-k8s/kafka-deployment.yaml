@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   replicas: 1
 
@@ -66,3 +68,4 @@ spec:
       - name: kafka-storage
         persistentVolumeClaim:
           claimName: kafka-pvc
+  
