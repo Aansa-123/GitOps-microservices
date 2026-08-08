@@ -15,7 +15,7 @@ spec:
       serviceAccountName: user-sa
       containers:
       - name: user-api
-        image: aansa123/user-service:dev-8
+        image: aansa123/user-service:dev-9
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
