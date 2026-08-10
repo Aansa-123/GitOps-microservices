@@ -19,7 +19,7 @@ spec:
       containers:
         - name: invoice-api
 
-          image: aansa123/invoice-service:dev
+          image: aansa123/invoice-service:dev-11
 
           imagePullPolicy: IfNotPresent
 
