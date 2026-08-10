@@ -20,7 +20,7 @@ spec:
       containers:
         - name: payment-api
 
-          image: aansa123/payment-service:dev-7
+          image: aansa123/payment-service:dev-8
 
           imagePullPolicy: IfNotPresent
 
