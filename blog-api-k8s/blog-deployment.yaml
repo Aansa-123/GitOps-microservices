@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: blog-api
-          image: aansa123/blog-service:dev-10
+          image: aansa123/blog-service:dev-11
           imagePullPolicy: IfNotPresent
 
           ports:
