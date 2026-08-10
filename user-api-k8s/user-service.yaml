@@ -6,6 +6,7 @@ spec:
   selector:
     app: user-api
   ports:
-    - port: 3000
+    - name: metrics
+      port: 3000
       targetPort: 3000
   type: NodePort
