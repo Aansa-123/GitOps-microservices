@@ -1,0 +1,261 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: microservices-dashboard
+  namespace: monitoring
+  annotations:
+    argocd.argoproj.io/tracking-id: grafana-argocd:grafana.integreatly.org/GrafanaDashboard:monitoring/microservices-dashboard
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: monitoring-grafana
+
+  json: |
+    {
+      "title": "Microservices Observability",
+      "uid": "microservices-observability",
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "version": 1,
+      "refresh": "30s",
+      "panels": [
+        {
+          "id": 1,
+          "title": "Microservices Health",
+          "type": "stat",
+          "gridPos": {
+            "h": 5,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "up{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\"}",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "orientation": "auto",
+            "textMode": "auto",
+            "colorMode": "value"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "0": {
+                      "text": "DOWN"
+                    },
+                    "1": {
+                      "text": "UP"
+                    }
+                  }
+                }
+              ]
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 2,
+          "title": "HTTP Request Rate",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 5
+          },
+          "targets": [
+            {
+              "expr": "sum by (service) (rate(http_request_duration_seconds_count{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\",route!=\"/metrics\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps"
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 3,
+          "title": "HTTP Response Codes",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 5
+          },
+          "targets": [
+            {
+              "expr": "sum by (service, status_code) (rate(http_request_duration_seconds_count{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\",route!=\"/metrics\"}[5m]))",
+              "legendFormat": "{{service}} - {{status_code}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps"
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 4,
+          "title": "Average HTTP Latency",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 13
+          },
+          "targets": [
+            {
+              "expr": "sum by (service) (rate(http_request_duration_seconds_sum{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\",route!=\"/metrics\"}[5m])) / sum by (service) (rate(http_request_duration_seconds_count{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\",route!=\"/metrics\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 5,
+          "title": "P95 HTTP Latency",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 13
+          },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum by (service, le) (rate(http_request_duration_seconds_bucket{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\",route!=\"/metrics\"}[5m])))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 6,
+          "title": "Node.js Event Loop Lag",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 21
+          },
+          "targets": [
+            {
+              "expr": "nodejs_eventloop_lag_p99_seconds{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\"}",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 7,
+          "title": "Active Requests",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 21
+          },
+          "targets": [
+            {
+              "expr": "nodejs_active_requests_total{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\"}",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 8,
+          "title": "Node.js External Memory",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 29
+          },
+          "targets": [
+            {
+              "expr": "nodejs_external_memory_bytes{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\"}",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes"
+            },
+            "overrides": []
+          }
+        },
+        {
+          "id": 9,
+          "title": "Garbage Collection Rate",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 29
+          },
+          "targets": [
+            {
+              "expr": "rate(nodejs_gc_duration_seconds_count{namespace=\"default\",service=~\"user-service|blog-service|invoice-service|payment-service\"}[5m])",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ops"
+            },
+            "overrides": []
+          }
+        }
+      ]
+    }
