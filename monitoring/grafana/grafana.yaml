@@ -7,7 +7,11 @@ metadata:
     dashboards: monitoring-grafana
 spec:
   external:
+    adminUser:
+      name: grafana-admin-credentials
+      key: admin-user
+    adminPassword:
+      name: grafana-admin-credentials
+      key: admin-password
+    tenantNamespace: default
     url: http://monitoring-grafana.monitoring.svc:80
-    apiKey:
-      name: grafana-operator-token
-      key: service_account_token
