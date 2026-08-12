@@ -13,4 +13,4 @@ spec:
       port: 3500
       targetPort: 3500
 
-  type: NodePort
+  type: ClusterIP
