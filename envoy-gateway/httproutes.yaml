@@ -30,7 +30,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /blogs
+            value: /blog
 
       backendRefs:
         - name: blog-service
@@ -49,7 +49,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /invoices
+            value: /invoice
 
       backendRefs:
         - name: invoice-service
@@ -68,7 +68,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /payments
+            value: /payment
 
       backendRefs:
         - name: payment-service
