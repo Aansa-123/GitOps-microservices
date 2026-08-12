@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: envoy-gateway-argocd
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: git@github.com:Aansa-123/GitOps-microservices.git
+    targetRevision: dev
+    path: envoy-gateway
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
