@@ -30,8 +30,13 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /blog
-
+            value: /api/blog
+      filters: 
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /blog
       backendRefs:
         - name: blog-service
           port: 3001
