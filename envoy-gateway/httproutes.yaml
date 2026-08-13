@@ -40,6 +40,17 @@ spec:
       backendRefs:
         - name: blog-service
           port: 3001
+      timeouts:
+        request: 10s
+        backendRequest: 8s
+      retries:
+        attempts: 3
+        perTryTimeout: 1s
+        codes:
+          - 500
+          - 502
+          - 503
+          - 504
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
